@@ -1,8 +1,8 @@
 #define SAMPLING 300
 #define VOFFSET 512
 #define ADC_PIN A0 
-#define AMPLITUDE 411.00 
-#define REAL_VAC 233.5 
+#define AMPLITUDE 400
+#define REAL_VAC 230 
 int ADC_MAX,ADC_MIN;
 int ADC_VPP;
 void setup()
