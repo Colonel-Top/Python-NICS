@@ -16,18 +16,15 @@ def Connection():
     db = MySQLdb.connect("pe.colonel-tech.com","colonel","pythonelectric","pe" )
     cur = db.cursor()
 #define
-ids = 1
-elname = "blender"
-eltype = "Kitchen Utilities"
+
 initVALUE = 500
 initNAME = "Tester"
 times = 1
 
 def main():
     print("Loading Database ...")
-    fetch()
     Connection()
-    Menu()
+'''
 def Menu():
     m_select = int(input("1. to Fetch last Row\n2.Set up\n3.Push Query with current Settings\n4.Clear Query\nElse Exirt\nEnter Number : "))
     if m_select == 1:
@@ -41,56 +38,40 @@ def Menu():
     else:
         print("Out of Choice Terminated Program")
         db.close()
-        sys.exit()
+        sys.exit()'''
 def clear_query():
     print(str(cur.execute("DELETE FROM `nics`;"))+ " Rows Affected")
     print("Query Cleared")
     db.commit()
-    Menu()
 def fetch():
-    last_result = int(cur.execute("SELECT ID FROM `nics` ORDER BY ID DESC LIMIT 1"))
+    last_result = int(cur.execute("SELECT Dayamount FROM `record` WHERE 1"))
     #print(last_result)
     ids = cur.fetchone()
     if ids:
-        ids = ids[0]
+        times = ids[0]
     else:
-        ids = "None"
-    print ("Last ID : " + str(ids))
-    Menu()
-def setup():
-    print("Please Insert This following Information for Experiment")
-    print("-------------------------------------------------------")
-    global initNAME,elname,eltype,times
-    initNAME = input("Name : ")
-    elname = input("Electricity name : ")
-    eltype = input("Electricity type : ")
-    times = int(input("Count of Test : "))
-    Menu()
+        times = 0
+    print ("Total Day to measure : " + str(times))
+def measurehour()
+    totalrun = 3600
+    while(totalrun >=0):
+        
 def Send_toDB (times):
-    last_result = int(cur.execute("SELECT ID FROM `nics` ORDER BY ID DESC LIMIT 1"))
-    #print(last_result)
-    ids = cur.fetchone()
-    if ids:
-        ids = int(ids[0])
-    else :
-        ids = int(0)
-    ids =  ids +1
     print("Pushing Query ...")
     i = 0
     while(times > 0):
         i = i+1
-        print("%s of %s",(i,times))
-        push_query(ids,initNAME,elname,eltype,gdate, strtime, initVALUE)
+        #print("%s of %s",(i,times))
+        push_query(gdate, strtime, initVALUE)
         times -= 1
-    Menu()
-def push_query(ids,initNAME,elname,eltype,gdate, strtime, initVALUE):
+def push_query(gdate, strtime, initVALUE):
     try:
         now = datetime.now()
         gdate = (now.strftime("%Y-%m-%d"))
         strtime = str(now.hour)+":"+str(now.minute)+":"+str(now.second)
         initVALUE = randint(0,1000)
-        print ("PUSH VALUES : (%s,%s,%s,%s,%s,%s,%s)",( ids,initNAME,elname,eltype,gdate, strtime, initVALUE))
-        cur.execute("INSERT INTO nics (ID,NAME,El_Name,EL_TYPE,DATE,TIME,VALUE) VALUES (%s,%s,%s,%s,%s,%s,%s)",( ids,initNAME,elname,eltype,gdate, strtime, initVALUE))
+        print ("PUSH VALUES : (%s,%s,%s)",( gdate, strtime, initVALUE))
+        cur.execute("INSERT INTO nics (DATE,TIME,VALUE) VALUES (%s,%s,%s)",(gdate, strtime, initVALUE))
         '''if cur.lastrowid:
             print('last insert id', cur.lastrowid)
         else:
